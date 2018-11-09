@@ -9,7 +9,6 @@ public abstract class Cars implements Movable {
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
     private final String modelName; // The car model name
-    private Point currentpoint = new Point(0,0);
     private Direction direction = Direction.NORTH;
 
     public Cars(int nrDoors, double enginePower, double currentSpeed, Color color, String modelName) {
@@ -55,29 +54,39 @@ public abstract class Cars implements Movable {
         return 0;
     }
 
+    public void setTurboOn() {
+    }
+    public void setTurboOff() {
+    }
+
     /**
-     *  A method that increments the currentspeed variable of a Cars object by speedfactor
+     *  A method that increments the currentspeed variable of a Cars subclass-object by speedfactor times amount
      */
 
     private void incrementSpeed(double amount) {
         currentSpeed = getCurrentSpeed() + speedFactor() * amount;
         if (currentSpeed > enginePower){
-            currentSpeed = enginePower;
+            this.currentSpeed = enginePower;
         }
     }
     /**
-     *  A method that decrements the currentspeed variable of a Cars object by speedfactor
+     *  A method that decrements the currentspeed variable of a Cars object by speedfactor times amount
      */
 
     private void decrementSpeed(double amount) {
         currentSpeed = getCurrentSpeed() - speedFactor() * amount;
         if (currentSpeed < 0){
-            currentSpeed = 0;
+            this.currentSpeed = 0;
         }
     }
 
-    public void setCurrentpoint(Point currentpoint) {
-        this.currentpoint = currentpoint;
+    public void setCurrentpoint(int x, int y) {
+        this.currentpoint.x = x;
+        this.currentpoint.y = y;
+    }
+
+    public Point getCurrentpoint() {
+        return this.currentpoint;
     }
 
     /**
@@ -85,21 +94,21 @@ public abstract class Cars implements Movable {
      */
     public void move() {
         if (direction.equals(Direction.NORTH)){
-            setCurrentpoint(new Point(currentpoint.x,  currentpoint.y + ((int) currentSpeed)));
+            currentpoint.move(currentpoint.x, currentpoint.y + ((int) currentSpeed));
         }
         else if (direction.equals(Direction.EAST)){
-            setCurrentpoint(new Point(currentpoint.x + (int) currentSpeed,  currentpoint.y ));
+            currentpoint.move(currentpoint.x + (int) currentSpeed,  currentpoint.y );
         }
         else if (direction.equals(Direction.SOUTH)){
-            setCurrentpoint(new Point(currentpoint.x ,  currentpoint.y - (int) currentSpeed));
+            currentpoint.move(currentpoint.x, currentpoint.y - (int) currentSpeed);
         }
         else if (direction.equals(Direction.WEST)) {
-            setCurrentpoint(new Point(currentpoint.x - (int) currentSpeed, currentpoint.y));
+            currentpoint.move(currentpoint.x - (int) currentSpeed, currentpoint.y);
         }
     }
 
     /**
-     * A method that changes the Direction of our car to the left
+     * A method that changes the direction of our car to the left
      */
     public void turnLeft() {
         int n = direction.ordinal() -1;
@@ -112,7 +121,7 @@ public abstract class Cars implements Movable {
     }
 
     /**
-     * A method that changes the Direction of our car to the right
+     * A method that changes the direction of our car to the right
      */
     public void turnRight() {
         int n = direction.ordinal() + 1;
@@ -125,7 +134,7 @@ public abstract class Cars implements Movable {
     }
 
     /**
-     * A method that calls incrementSpeed() if amount is between 0 and 1 by that factor
+     * A method that calls incrementSpeed() if amount is between 0 and 1
      */
     public void gas(double amount){
         if (amount >= 0 && amount <= 1){
@@ -142,5 +151,6 @@ public abstract class Cars implements Movable {
             decrementSpeed(amount);
         }
     }
+
 
 }
